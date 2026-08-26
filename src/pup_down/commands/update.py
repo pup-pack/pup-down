@@ -1,13 +1,19 @@
-"""Report repository scaffolding differences from the managed template baseline."""
+"""Report repository scaffolding differences from the managed template baseline.
+
+pup-down is read-only.
+It detects the target repository, resolves the
+effective template baseline from pup-core,
+compares the two, and prints a status line per managed file.
+Nothing on disk is modified.
+"""
 
 from pathlib import Path
 
 from pup_core.inspect.detect import detect_repository
+from pup_core.templates.baseline import infer_layers
+from pup_core.templates.fetch import TemplateSource, fetch_template_snapshot
 
 from pup_down.compare import compare_repository_to_template
-from pup_down.templates.baseline import infer_layers
-from pup_down.templates.fetch import fetch_template_snapshot
-from pup_down.templates.types import TemplateSource
 
 __all__ = ["run"]
 
@@ -25,10 +31,15 @@ def run(
         root: Repository root. If None, pup-down detects the current repo root.
         templates: GitHub owner/repo for canonical templates.
         ref: Git ref, branch, or tag.
-        templates_path: Optional local templates repo path.
+        templates_path: Optional local templates repo path. When set, templates
+            are read from disk instead of GitHub.
 
     Returns:
-        Process exit code.
+        Process exit code. Always 0; pup-down reports and never fails on drift.
+
+    Raises:
+        RepositoryDetectionError: If the target repository cannot be resolved.
+        UnsafePathError: If a template target path resolves outside the repo.
     """
     repository = detect_repository(root)
 

@@ -1,4 +1,4 @@
-# pup-down: Professional Python Project Updater (Move Updates Down to Templates)
+# pup-down: Reports Repo Infrastructure Changes That Belong in Templates
 
 [![PyPI](https://img.shields.io/pypi/v/pup-down?logo=pypi&label=pypi)](https://pypi.org/project/pup-down/)
 [![Docs Site](https://img.shields.io/badge/docs-site-blue?logo=github)](https://pup-pack.github.io/pup-down/)
@@ -21,9 +21,9 @@ src="https://raw.githubusercontent.com/pup-pack/pup-down/main/docs/images/pup.pn
 alt="pup logo"
 width="110">
 
-> Opinionated professional Python project template comparison tool.
-> Shows when the active repo has more recent infrastructure files that
-> should possibly be copied to the canonical templates.
+> Report-only. Compares the active repository's infrastructure
+> against canonical templates and lists the files the repo
+> has moved ahead on that may be worth copying back upstream.
 
 ## Purpose
 
@@ -48,9 +48,10 @@ Each repository fetches the current baseline and compares it with its
 own infrastructure.
 Nothing reaches in from a central place, so:
 
-- **Repo owner is in control.** Run it when you choose.
-  No files are updated. A list of changes to possibly copy to the
-  canonical template files is provided.
+**Repo owner is in control.** Run it when you choose.
+No files are updated.
+A list of changes to possibly copy to the
+canonical template files is provided.
 
 Templates are fetched by **immutable commit SHA**,
 so an update always reflects the latest push to the template repository
@@ -64,7 +65,7 @@ For example:
 - `pyproject.toml` indicates ALL PY REPOS
 - `pyproject.toml` + `src` indicates ALL PY SRC REPOS
 
-## Template Source
+## Default Template Source
 
 - [templates](https://github.com/pup-pack/templates)
 
@@ -72,7 +73,7 @@ For example:
 
 ```shell
 # compare with canonical templates
-uvx pup-down
+uvx pup-down@latest
 
 # compare using the latest published pup-down version
 uvx pup-down@latest
@@ -99,6 +100,7 @@ code .
 ```shell
 uv self update
 uv python pin 3.15
+
 uv python install
 uv lock --upgrade
 uv sync

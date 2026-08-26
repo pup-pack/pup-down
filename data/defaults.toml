@@ -1,8 +1,0 @@
-# src/pup_down/data/defaults.toml
-
-[classification]
-prefixes = [
-    "pup-",
-]
-
-prefix_pattern = "^[a-zA-Z]+-\\d{2}-.+$"

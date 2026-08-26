@@ -13,6 +13,23 @@ and this project adheres to **[Semantic Versioning](https://semver.org/spec/v2.0
 
 ---
 
+## [0.2.0] - 2026-08-26
+
+### Changed
+
+- Updated inspection, template handling, and Git-history comparison to use
+  the shared `pup-core` 0.2.0 APIs instead of vendored copies.
+- Renamed the base exception `PupUpError` to `PupDownError`.
+- Simplified `pup-down` tests to focus on command and comparison behavior.
+
+### Removed
+
+- Removed the vestigial local `templates` package (`baseline_utils`,
+  `zensical`, and packaged `data/defaults.toml`); template handling is
+  provided by `pup-core`.
+
+---
+
 ## [0.1.0] - 2026-08-25
 
 ### Added
@@ -107,7 +124,8 @@ git push origin :refs/tags/vX.Z.Y
 
 ## Links
 
-[Unreleased]: https://github.com/pup-pack/pup-down/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/pup-pack/pup-down/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/pup-pack/pup-down/releases/tag/v0.2.0
 [0.1.0]: https://github.com/pup-pack/pup-down/releases/tag/v0.1.0
 
 <!-- markdownlint-enable MD024 -->

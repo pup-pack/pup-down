@@ -1,14 +1,19 @@
-"""Compare current repository scaffolding with canonical templates."""
+"""Compare current repository scaffolding with canonical templates.
+
+This module holds the pup-down-specific comparison logic.
+Only the read-only classification of drift lives here.
+"""
 
 from datetime import datetime
 
 from pup_core.base.types import RepositoryContext
+from pup_core.inspect.git_history import local_last_changed, remote_last_changed
+from pup_core.paths.safe import safe_repo_path
+from pup_core.templates.baseline import list_template_files
+from pup_core.templates.render import read_rendered_template
+from pup_core.templates.types import TemplateSnapshot
 
 from pup_down.base.types import ComparisonFile, ComparisonPlan, FileStatus
-from pup_down.git_history import local_last_changed, remote_last_changed
-from pup_down.templates.baseline import list_template_files
-from pup_down.templates.render import read_rendered_template
-from pup_down.templates.types import TemplateSnapshot
 
 __all__ = ["compare_repository_to_template"]
 
@@ -22,6 +27,12 @@ def compare_repository_to_template(
 ) -> ComparisonPlan:
     """Compare repository scaffolding with the effective template baseline.
 
+    For every effective template file, the repository copy is classified as
+    current, missing (deleted in the repo), or differing. Differences are
+    further split by last-change Git timestamps into repo-newer or
+    template-newer, so drift that likely belongs back in the templates can
+    be told apart from stale scaffolding.
+
     Args:
         repository: Detected repository context.
         layers: Effective additive template layers for the repository.
@@ -30,6 +41,10 @@ def compare_repository_to_template(
 
     Returns:
         Complete read-only comparison plan.
+
+    Raises:
+        UnsafePathError: If a template target path resolves outside the
+            repository root.
     """
     template_files = list_template_files(
         snapshot=snapshot,
@@ -39,7 +54,7 @@ def compare_repository_to_template(
     comparisons: list[ComparisonFile] = []
 
     for template_file in template_files:
-        target_path = repository.root / template_file.target_path
+        target_path = safe_repo_path(repository.root, template_file.target_path)
 
         template_text = read_rendered_template(
             snapshot=snapshot,
@@ -124,7 +139,11 @@ def _classify_difference(
     repo_changed: datetime | None,
     template_changed: datetime | None,
 ) -> FileStatus:
-    """Classify differing content using last-change Git timestamps."""
+    """Classify differing content using last-change Git timestamps.
+
+    When either timestamp is unavailable the files are reported as a plain
+    difference, since direction cannot be established.
+    """
     if repo_changed is None or template_changed is None:
         return "different"
 

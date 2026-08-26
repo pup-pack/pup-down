@@ -1,6 +1,6 @@
 # pup-down
 
-<img src="images/pup.png" alt="pup-down logo" width="110">
+<img src="images/pup.png" alt="pup logo" width="110">
 
 `pup-down` identifies repository infrastructure changes that may belong
 in the canonical project templates.
