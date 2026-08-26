@@ -1,0 +1,8 @@
+# src/pup_down/data/defaults.toml
+
+[classification]
+prefixes = [
+    "datafun-",
+]
+
+prefix_pattern = "^[a-zA-Z]+-\\d{2}-.+$"

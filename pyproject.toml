@@ -1,0 +1,172 @@
+# ============================================================
+# pyproject.toml
+# ============================================================
+
+# ============================================================
+# SECTION 1: PROJECT IDENTITY (name, version, dependencies)
+# ============================================================
+
+[project]
+name = "pup-down"
+readme = "README.md"
+requires-python = ">=3.15"
+dynamic = ["version"] # WHY: Version is computed from git tags at build time.
+description = "Read-only command-line tool for identifying repository infrastructure changes that may belong in canonical project templates."
+license-files = ["LICENSE"]
+authors = [
+    { name = "Denise Case" },
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.15",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Build Tools",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+]
+keywords = [
+    "repository-baseline",
+    "repository-templates",
+    "template-management",
+    "developer-tooling",
+    "command-line-tool",
+    "python",
+    "uvx",
+    "automation",
+    "software-architecture",
+]
+
+dependencies = [
+    "pup-core>=0.1.3",
+]
+
+[dependency-groups]
+# WHY: Development dependencies support maintaining and validating the project
+# but are not runtime dependencies or optional features of the published package.
+
+dev = [
+    # REQ.DEV.DEPS: External packages used for linting, testing, type checking, etc.
+    "build",      # WHY: Build frontend for packaging validation when needed.
+    "pre-commit", # WHY: Pre-commit hooks for consistent formatting and linting.
+    "pytest",     # WHY: Test framework for unit and integration tests.
+    "pytest-cov", # WHY: Test coverage reporting for quality metrics and CI gating.
+    "ruff",       # WHY: Fast linting and formatting for Python code.
+    "twine",      # WHY: Required for artifact validation: twine check dist/*.
+    "ty",         # WHY: Type checking for static analysis and type safety.
+]
+
+docs = [
+    # REQ.DOCS.DEPS: External packages used to generate project documentation.
+    "zensical",
+    "mkdocstrings[python]", # WHY: Auto-generate API docs from docstrings.
+]
+
+[project.scripts]
+# WHY: pup-down matches the package name for direct uvx use.
+pup-down = "pup_down.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/pup-pack/pup-down"
+Repository = "https://github.com/pup-pack/pup-down"
+Documentation = "https://pup-pack.github.io/pup-down/"
+Issues = "https://github.com/pup-pack/pup-down/issues"
+Changelog = "https://github.com/pup-pack/pup-down/blob/main/CHANGELOG.md"
+
+# ============================================================
+# SECTION 2: TOOL CONFIGURATION (Professional basics)
+# ============================================================
+
+# === MARIMO REACTIVE NOTEBOOKS ===
+
+[tool.marimo.save]
+autosave = "after_delay"
+autosave_delay = 1000
+format_on_save = true
+
+[tool.marimo.package_management]
+manager = "uv"
+
+[tool.marimo.runtime]
+pythonpath = ["./src"]
+
+# === PYTEST (VERIFY LOGIC) ===
+
+[tool.pytest.ini_options]
+# WHY: Consistent test discovery and coverage visibility.
+minversion = "9.0"
+testpaths = ["tests"]
+addopts = "--cov=src --cov-fail-under=20 --cov-report=term-missing"
+filterwarnings = [
+    "ignore:FigureCanvasAgg is non-interactive, and thus cannot be shown:UserWarning",
+]
+
+# === RUFF (PYTHON FORMATTING AND LINTING) ===
+
+[tool.ruff.lint] # WHY: Evolve with Ruff's defaults; production might pin an explicit set.
+extend-select = [
+    # --- turn on for additional linting rules ---
+    # "D",  # WHY: Require docstrings; VS Code helps generate them.
+]
+
+[tool.ruff.lint.isort] # WHY: Sort plain-import and from-import lines together within each section.
+force-sort-within-sections = true
+
+[tool.ruff.lint.per-file-ignores] # WHY: Some file types need lint exceptions.
+"src/**/__init__.py" = ["F401"] # Allow re-export patterns.
+"src/**/_version.py" = ["ALL"]  # Auto-generated file; do not lint.
+"tests/**/*.py" = ["D", "B018"] # Tests need no docstrings; B018 is default-on.
+"notebooks/**/*.py" = ["D", "PLR1711", "RUF059"]   # marimo cells: bare returns + cell-scoped unused vars are the format, not defects
+
+[tool.ruff.lint.pydocstyle] # WHY: Use Google docstring style when D is enabled.
+convention = "google"
+
+# === UV (PYTHON ENVIRONMENT AND DEPENDENCY MANAGEMENT) ===
+
+[tool.uv]
+# WHY: Install all dependency groups defined by this repository by default.
+# OBS: This keeps the canonical `uv sync` command identical across project types
+#      and ensures all repository features work after setup.
+default-groups = "all"
+
+# ============================================================
+# SECTION 3: BUILD SYSTEM
+# ============================================================
+#
+# REQ.PROJECT: A build system MUST be declared for package discovery and publishing.
+# REQ.STRUCTURE: All importable code MUST live under src/.
+# WHY src/ layout: Prevents accidental imports from the repo root and ensures
+# consistent behavior across IDEs, tests, CI, and PyPI.
+
+[build-system]
+build-backend = "hatchling.build"
+requires = ["hatchling", "hatch-vcs"]
+
+[tool.hatch.build.hooks.vcs]
+# WHY: Writes computed version into src/*/_version.py at build time.
+version-file = "src/pup_down/_version.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "src/pup_down",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "pyproject.toml",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pup_down"]
+
+[tool.hatch.version]
+# Used when no git tags are present. Keep in sync with CITATION.cff.
+fallback-version = "0.1.0"
+# WHY: Version is derived from git tags at build time.
+source = "vcs"
+# WHY: Accept semantic-version tags with or without a leading v.
+tag-pattern = '^(?:v)?(?P<version>\d+\.\d+\.\d+)$'

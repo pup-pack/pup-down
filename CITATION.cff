@@ -1,0 +1,43 @@
+# ============================================================
+# CITATION.cff (How to cite this project)
+# ============================================================
+
+# REQ.UNIVERSAL: Professional open projects SHOULD include this file.
+# USAGE: See https://citation-file-format.github.io/ for details.
+
+cff-version: "1.2.0"
+message: "If you use this work, please cite it using the metadata in this file."
+type: software
+
+title: "pup-down"
+# Set version and date-released to match latest git tag or release.
+version: "0.1.0"
+date-released: "2026-08-25"
+
+authors:
+  - family-names: Case
+    given-names: Denise M.
+    orcid: "https://orcid.org/0000-0001-6165-7389"
+    affiliation: "Northwest Missouri State University, School of Computer Science and Information Systems, Maryville, MO, USA"
+
+repository-code: "https://github.com/pup-pack/pup-down"
+url: "https://github.com/pup-pack/pup-down"
+
+license: MIT
+
+abstract: >
+  Read-only command-line tool for comparing professional Python repository
+  infrastructure with canonical templates and identifying scaffolding changes
+  that may need to be incorporated into the maintained templates.
+
+keywords:
+  - repository-baseline
+  - repository-templates
+  - template-management
+  - developer-tooling
+  - command-line-tool
+  - python
+  - uvx
+  - automation
+  - software-architecture
+  - accountable-repositories
