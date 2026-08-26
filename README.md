@@ -3,8 +3,11 @@
 [![PyPI](https://img.shields.io/pypi/v/pup-down?logo=pypi&label=pypi)](https://pypi.org/project/pup-down/)
 [![Docs Site](https://img.shields.io/badge/docs-site-blue?logo=github)](https://pup-pack.github.io/pup-down/)
 [![Repo](https://img.shields.io/badge/repo-GitHub-black?logo=github)](https://github.com/pup-pack/pup-down)
-[![Python 3.15](https://img.shields.io/badge/python-3.15%2B-blue?logo=python)](./pyproject.toml)
-[![License](https://img.shields.io/badge/license-MIT-yellow.svg)](./LICENSE)
+[![Python 3.15](https://img.shields.io/badge/python-3.15%2B-blue?logo=python)](https://github.com/pup-pack/pup-down/blob/main/pyproject.toml)
+[![uv managed](https://img.shields.io/badge/uv-managed-DE5FE9)](https://docs.astral.sh/uv/)
+[![ty type checked](https://img.shields.io/badge/ty-type_checked-2F80ED)](https://docs.astral.sh/ty/)
+[![Zensical docs](https://img.shields.io/badge/Zensical-docs-purple)](https://zensical.org/)
+[![MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://github.com/pup-pack/pup-down/blob/main/LICENSE)
 
 [![CI](https://github.com/pup-pack/pup-down/actions/workflows/ci-python-zensical.yml/badge.svg?branch=main)](https://github.com/pup-pack/pup-down/actions/workflows/ci-python-zensical.yml)
 [![Docs-Deploy](https://github.com/pup-pack/pup-down/actions/workflows/deploy-zensical.yml/badge.svg?branch=main)](https://github.com/pup-pack/pup-down/actions/workflows/deploy-zensical.yml)
@@ -18,9 +21,9 @@ src="https://raw.githubusercontent.com/pup-pack/pup-down/main/docs/images/pup.pn
 alt="pup logo"
 width="110">
 
-> Opinionated professional Python project template updater.
-> Shows when active repo has more recent files that
-> should possibly be copied to templates/.
+> Opinionated professional Python project template comparison tool.
+> Shows when the active repo has more recent infrastructure files that
+> should possibly be copied to the canonical templates.
 
 ## Purpose
 
@@ -34,18 +37,20 @@ Professional Python repositories commonly share infrastructure such as:
 - continuous integration
 - package and release validation
 
-`pup-down` makes it easy to keep the template files commonly used in
-professional projects current and consistent.
+`pup-down` makes it easy to identify infrastructure improvements made
+during recent work that should possibly be copied back to the canonical
+templates.
 
 ## Benefits
 
 `pup-down` is **report-only**.
-Each repository fetches the current baseline and applies it on its own terms.
+Each repository fetches the current baseline and compares it with its
+own infrastructure.
 Nothing reaches in from a central place, so:
 
 - **Repo owner is in control.** Run it when you choose.
-  No files are updated. A list of changes you might want to copy to the
-  canonical template files are provide.
+  No files are updated. A list of changes to possibly copy to the
+  canonical template files is provided.
 
 Templates are fetched by **immutable commit SHA**,
 so an update always reflects the latest push to the template repository
@@ -63,13 +68,13 @@ For example:
 
 - [templates](https://github.com/pup-pack/templates)
 
-## Update a Repo based on Templates
+## Compare a Repo with Templates
 
 ```shell
-# see what's changed
+# compare with canonical templates
 uvx pup-down
 
-# see what files the command would update (dry run, force latest version)
+# compare using the latest published pup-down version
 uvx pup-down@latest
 ```
 
@@ -128,12 +133,12 @@ git push -u origin main
 
 ## Annotations
 
-[.annotations/annotations.md](./.annotations/annotations.md)
+[.annotations/annotations.md](https://github.com/pup-pack/pup-down/blob/main/.annotations/annotations.md)
 
 ## Citation
 
-[CITATION.cff](./CITATION.cff)
+[CITATION.cff](https://github.com/pup-pack/pup-down/blob/main/CITATION.cff)
 
 ## License
 
-[MIT](./LICENSE)
+[MIT](https://github.com/pup-pack/pup-down/blob/main/LICENSE)

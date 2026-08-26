@@ -15,7 +15,19 @@ and this project adheres to **[Semantic Versioning](https://semver.org/spec/v2.0
 
 ## [0.1.0] - 2026-08-25
 
-- initial version
+### Added
+
+- Read-only comparison of repository scaffolding against canonical templates.
+- Automatic repository detection and additive template-layer inference.
+- Reporting for current, different, repository-newer, template-newer,
+  added, and deleted scaffolding files.
+- Git history comparison for determining which differing file was changed
+  more recently.
+- Canonical template fetching from **pup-pack/templates** with support for
+  local template paths.
+- Repository-specific template rendering using detected project metadata.
+- Existing Zensical template handling and layered template architecture.
+- Direct command-line execution with **uvx pup-down**.
 
 ---
 
@@ -61,7 +73,11 @@ uv run python -m pytest
 uv run ty check
 uv run python -m zensical build
 
+<!-- markdownlint-disable MD013 -->
+
 uv run python -c "import shutil; from pathlib import Path; shutil.rmtree(Path('dist'), ignore_errors=True)"
+
+<!-- markdownlint-enable MD013 -->
 
 uv build
 uvx twine check dist/*
